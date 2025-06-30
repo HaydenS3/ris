@@ -3,6 +3,7 @@
 
 # TODO: Convert the solution to run using parallel processing on RIS.
 # TODO: Use pytorch instead of keras.
+# TODO: Experiment with different architectures and hyperparameters to improve accuracy
 # TODO: Add image augmentation to the model
 
 import pandas as pd
