@@ -40,9 +40,13 @@ def load_data():
     x_train = x_train.values.reshape((x_train.shape[0], 28, 28, 1))
     x_test = x_test.values.reshape((x_test.shape[0], 28, 28, 1))
 
+    # One hot encoding of labels
+    y_train = to_categorical(y_train, num_classes=10)
+
     return x_train, y_train, x_test
 
 
+# Set a random seed for reproducibility
 seed = 33
 np.random.seed(seed)
 
@@ -70,7 +74,6 @@ def linear_model(x_train, y_train):
     model.fit(batches, epochs=4, validation_data=test_batches,
               steps_per_epoch=batches.n, validation_steps=test_batches.n)
 
-    # Save the model
     model.save(f'linear-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
 
@@ -90,7 +93,6 @@ def fully_connected_model(x_train, y_train):
     model.fit(batches, epochs=4, validation_data=test_batches,
               steps_per_epoch=batches.n, validation_steps=test_batches.n)
 
-    # Save the model
     model.save(f'fully-connected-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
 
@@ -116,7 +118,6 @@ def cnn_model(x_train, y_train):
     model.fit(batches, epochs=4, validation_data=test_batches,
               steps_per_epoch=batches.n, validation_steps=test_batches.n)
 
-    # Save the model
     model.save(f'cnn-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
 
@@ -130,9 +131,6 @@ std = x_train.std().astype(np.float32)
 def standardize(x):
     return (x - mean) / std
 
-
-# One hot encoding of labels
-y_train = to_categorical(y_train, num_classes=10)
 
 # linear_model(x_train, y_train)
 # fully_connected_model(x_train, y_train)
