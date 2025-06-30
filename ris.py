@@ -57,8 +57,6 @@ def generate_batches(x, y, batch_size=64):
 
 def linear_model(x_train, y_train):
     """ Train a simple linear model on the MNIST dataset."""
-    BATCH_SIZE = 64
-
     model = Sequential()
     model.add(Input(shape=(28, 28, 1)))
     model.add(Lambda(standardize))
@@ -78,8 +76,6 @@ def linear_model(x_train, y_train):
 
 def fully_connected_model(x_train, y_train):
     """ Train a fully connected model on the MNIST dataset."""
-    BATCH_SIZE = 64
-
     model = Sequential()
     model.add(Input(shape=(28, 28, 1)))
     model.add(Lambda(standardize))
@@ -98,6 +94,32 @@ def fully_connected_model(x_train, y_train):
     model.save(f'fully-connected-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
 
+def cnn_model(x_train, y_train):
+    """ Train a CNN model on the MNIST dataset."""
+    model = Sequential()
+    model.add(Input(shape=(28, 28, 1)))
+    model.add(Lambda(standardize))
+    model.add(Convolution2D(32, (3, 3), activation='relu'))
+    model.add(Convolution2D(32, (3, 3), activation='relu'))
+    model.add(MaxPooling2D())
+    model.add(Convolution2D(64, (3, 3), activation='relu'))
+    model.add(Convolution2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D())
+    model.add(Flatten())
+    model.add(Dense(523, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.01), metrics=['accuracy'])
+
+    batches, test_batches = generate_batches(x_train, y_train, BATCH_SIZE)
+
+    model.fit(batches, epochs=4, validation_data=test_batches,
+              steps_per_epoch=batches.n, validation_steps=test_batches.n)
+
+    # Save the model
+    model.save(f'cnn-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
+
+
 x_train, y_train, x_test = load_data()
 
 # Feature standardization
@@ -113,4 +135,5 @@ def standardize(x):
 y_train = to_categorical(y_train, num_classes=10)
 
 # linear_model(x_train, y_train)
-fully_connected_model(x_train, y_train)
+# fully_connected_model(x_train, y_train)
+cnn_model(x_train, y_train)
