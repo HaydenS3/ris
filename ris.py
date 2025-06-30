@@ -3,10 +3,12 @@
 
 # TODO: Convert the solution to run using parallel processing on RIS.
 # TODO: Use pytorch instead of keras.
+# TODO: Add image augmentation to the model
 
 import pandas as pd
 import numpy as np
 from keras.utils import to_categorical
+import datetime
 
 
 def load_data():
@@ -36,17 +38,37 @@ seed = 33
 np.random.seed(seed)
 
 
-def linear_model():
+def linear_model(x_train, y_train):
     from keras.models import Sequential
     from keras.layers import Lambda, Dense, Flatten, Input, Dropout
     from keras.callbacks import EarlyStopping
     from keras.layers import BatchNormalization, Convolution2D, MaxPooling2D
+    from keras.optimizers import RMSprop
+    from keras.src.legacy.preprocessing.image import ImageDataGenerator  # ImageDataGenerator has been deprecated in keras
+    from sklearn.model_selection import train_test_split
+
+    BATCH_SIZE = 64
 
     model = Sequential()
     model.add(Input(shape=(28, 28, 1)))
     model.add(Lambda(standardize))
-    model.add(Flatten())
+    model.add(Flatten())    # Converts to 2D tensor for dense layers
     model.add(Dense(10, activation='softmax'))
+
+    model.compile(loss='categorical_crossentropy', optimizer=RMSprop(), metrics=['accuracy'])
+    generator = ImageDataGenerator()
+
+    x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.2, random_state=seed)
+
+    # Create shuffled batches to reduce memory usage
+    batches = generator.flow(x_train, y_train, batch_size=BATCH_SIZE)
+    test_batches = generator.flow(x_test, y_test, batch_size=BATCH_SIZE)
+
+    model.fit(batches, epochs=4, validation_data=test_batches,
+              steps_per_epoch=batches.n, validation_steps=test_batches.n)
+
+    # Save the model
+    model.save(f'linear-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
 
 x_train, y_train, x_test = load_data()
@@ -63,4 +85,4 @@ def standardize(x):
 # One hot encoding of labels
 y_train = to_categorical(y_train, num_classes=10)
 
-linear_model()
+linear_model(x_train, y_train)
