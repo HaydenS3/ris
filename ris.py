@@ -1,11 +1,6 @@
 # Description: This file is a solution to the digit recognizer Kaggle competition. The goal is to convert the solution to run using parallel processing on RIS.
 # Author: Hayden Schroeder
 
-# TODO: Convert the solution to run using parallel processing on RIS.
-# TODO: Use pytorch instead of keras.
-# TODO: Experiment with different architectures and hyperparameters to improve accuracy
-# TODO: Add image augmentation to the model
-
 import pandas as pd
 import numpy as np
 from keras.utils import to_categorical
