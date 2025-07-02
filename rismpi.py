@@ -13,6 +13,7 @@ from keras.optimizers import RMSprop, Adam
 from keras.src.legacy.preprocessing.image import ImageDataGenerator  # ImageDataGenerator has been deprecated in keras
 from sklearn.model_selection import train_test_split
 import itertools
+from mpi4py import MPI
 
 CNN_HYPERPARAMETERS = {
     'conv_filters': [(16, 16), (16, 32), (32, 32), (32, 64), (64, 64), (64, 128)],
@@ -23,6 +24,10 @@ CNN_HYPERPARAMETERS = {
     'dropout_rate2': [0.2, 0.3, 0.4, 0.5],
     'validation_split': [0.1, 0.2, 0.3],
 }
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
 
 
 def load_data():
@@ -155,8 +160,14 @@ def standardize(x):
     return (x - mean) / std
 
 
+hyperparameter_combinations = generate_hyperparameter_combinations()
+num_combinations = len(hyperparameter_combinations) // size
+start = rank * num_combinations
+end = len(hyperparameter_combinations) if rank == size - 1 else start + num_combinations
+my_combinations = hyperparameter_combinations[start:end]
+
 # linear_model(x_train, y_train)
 # fully_connected_model(x_train, y_train)
-for hyperparameters in generate_hyperparameter_combinations():
-    print(f"Training CNN model with hyperparameters: {hyperparameters}")
+for i, hyperparameters in enumerate(my_combinations):
+    print(f'Process {rank}: Training model {start+i+1}...')
     cnn_model(x_train, y_train, hyperparameters)
