@@ -40,6 +40,7 @@ conda install -c conda-forge mpi4py openmpi
 
 ## Reading & Sources (in order of complexity?)
 
+- [Neural Networks - 3blue1brown](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi): If you prefer video explanations.
 - [Convolutional Neural Network from Scratch](https://medium.com/latinxinai/convolutional-neural-network-from-scratch-6b1c856e1c07)
 - [Understanding of Convolutional Neural Network](https://medium.com/@RaghavPrabhu/understanding-of-convolutional-neural-network-cnn-deep-learning-99760835f148)
 - [An Intuitive Explanation of Convolutional Neural Networks](https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/): This one includes great visualizations including those from the MNIST dataset.
