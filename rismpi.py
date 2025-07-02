@@ -143,10 +143,12 @@ def cnn_model(x_train, y_train, hyperparameters):
     batches, test_batches = generate_batches(
         x_train, y_train, hyperparameters['batch_size'], hyperparameters['validation_split'])
 
-    model.fit(batches, epochs=4, validation_data=test_batches,
-              steps_per_epoch=batches.n, validation_steps=test_batches.n, verbose=0)
+    history = model.fit(batches, epochs=4, validation_data=test_batches,
+                        steps_per_epoch=batches.n, validation_steps=test_batches.n, verbose=0)
 
-    model.save(f'cnn-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
+    accuracy = max(history.history['val_accuracy'])
+
+    return model, accuracy, hyperparameters
 
 
 def generate_hyperparameter_combinations():
@@ -179,5 +181,40 @@ start = rank * num_combinations
 end = len(hyperparameter_combinations) if rank == size - 1 else start + num_combinations
 my_combinations = hyperparameter_combinations[start:end]
 
+best_accuracy = -1
+best_model = None
+best_hyperparameters = None
+
 for i, hyperparameters in enumerate(tqdm(my_combinations, desc=f'Process {rank}', position=rank, leave=True)):
-    cnn_model(x_train, y_train, hyperparameters)
+    model, accuracy, params = cnn_model(x_train, y_train, hyperparameters)
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        best_model = model
+        best_hyperparameters = params
+
+all_accuracies = comm.gather(best_accuracy, root=0)  # Blocking
+all_hyperparameters = comm.gather(best_hyperparameters, root=0)  # Blocking
+# Do not gather all models to avoid memory issues
+
+if rank == 0:
+    global_best_accuracy = max(all_accuracies)
+    best_rank = all_accuracies.index(global_best_accuracy)
+    best_hyperparameters = all_hyperparameters[best_rank]
+
+    print(f"Global best accuracy: {global_best_accuracy:.4f} found by process {best_rank}")
+    print(f"Best hyperparameters: {best_hyperparameters}")
+
+    # Signal the best process to save its model
+    for i in range(size):
+        if i == best_rank:
+            comm.send(True, dest=i, tag=33)
+        else:
+            comm.send(False, dest=i, tag=33)
+
+else:
+    should_save = comm.recv(source=0, tag=33)
+
+if rank == 0 and best_rank == 0:
+    best_model.save(f'best_cnn_model_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.keras')
+elif rank != 0 and should_save:
+    best_model.save(f'best_cnn_model_{rank}_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.keras')

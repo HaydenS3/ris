@@ -24,6 +24,12 @@ conda install --file requirements.txt
 conda install -c conda-forge mpi4py openmpi
 ```
 
+## Running the Code
+
+First run the test MPI job using `mpirun -np 10 python mpitest.py`. This will run the code on 10 processes. The code will generate a random number for each process and print it out. This is a good way to test that MPI is working correctly. This will fail if the computer has less than 10 cores.
+
+If the test job works, you can run the main job using `mpirun -np <number_of_processes> python rismpi.py`. This will run the code on the specified number of processes.
+
 ## CNN Hyperparameters
 
 For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters. The current list of hyperparameters generates a total of 13,824 combinations.
@@ -83,8 +89,6 @@ The main reason for using CNNs is that regular neural networks don't scale well 
 
 ## TODOs
 
-- [ ] Convert the solution to run using parallel processing on RIS.
 - [ ] Use pytorch instead of keras.
-- [ ] Do hyperparameter tuning
 - [ ] Add image augmentation to the model
-- [ ] Improve CNN architecture, add dropout and batch normalization layers to the model. Add early stopping to prevent overfitting.
+- [ ] Improve CNN architecture. Add batch normalization layers to the model. Add early stopping to prevent overfitting.
