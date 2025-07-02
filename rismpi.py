@@ -7,13 +7,14 @@ from keras.utils import to_categorical
 import datetime
 from keras.models import Sequential
 from keras.layers import Lambda, Dense, Flatten, Input, Dropout
-from keras.callbacks import EarlyStopping
-from keras.layers import BatchNormalization, Convolution2D, MaxPooling2D
+from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import RMSprop, Adam
-from keras.src.legacy.preprocessing.image import ImageDataGenerator  # ImageDataGenerator has been deprecated in keras
 from sklearn.model_selection import train_test_split
 import itertools
 from mpi4py import MPI
+from tqdm import tqdm
+import os
+import tensorflow as tf
 
 CNN_HYPERPARAMETERS = {
     'conv_filters': [(16, 16), (16, 32), (32, 32), (32, 64), (64, 64), (64, 128)],
@@ -24,6 +25,9 @@ CNN_HYPERPARAMETERS = {
     'dropout_rate2': [0.2, 0.3, 0.4, 0.5],
     'validation_split': [0.1, 0.2, 0.3],
 }
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0=all, 1=info, 2=warning, 3=error only
+tf.get_logger().setLevel('ERROR')
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -63,10 +67,19 @@ np.random.seed(seed)
 
 def generate_batches(x, y, batch_size=64, test_size=0.2):
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_size, random_state=seed)
-    generator = ImageDataGenerator()
-    batches = generator.flow(x_train, y_train, batch_size=batch_size)
-    test_batches = generator.flow(x_test, y_test, batch_size=batch_size)
-    return batches, test_batches
+    # generator = ImageDataGenerator()
+    # batches = generator.flow(x_train, y_train, batch_size=batch_size)
+    # test_batches = generator.flow(x_test, y_test, batch_size=batch_size)
+    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+    train_dataset = train_dataset.shuffle(train_dataset.cardinality()).batch(batch_size).repeat()
+
+    test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test))
+    test_dataset = test_dataset.batch(batch_size).repeat()
+
+    train_dataset.n = len(x_train) // batch_size
+    test_dataset.n = len(x_test) // batch_size
+
+    return train_dataset, test_dataset
 
 
 def linear_model(x_train, y_train):
@@ -131,7 +144,7 @@ def cnn_model(x_train, y_train, hyperparameters):
         x_train, y_train, hyperparameters['batch_size'], hyperparameters['validation_split'])
 
     model.fit(batches, epochs=4, validation_data=test_batches,
-              steps_per_epoch=batches.n, validation_steps=test_batches.n)
+              steps_per_epoch=batches.n, validation_steps=test_batches.n, verbose=0)
 
     model.save(f'cnn-model-{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}.keras')
 
@@ -166,8 +179,5 @@ start = rank * num_combinations
 end = len(hyperparameter_combinations) if rank == size - 1 else start + num_combinations
 my_combinations = hyperparameter_combinations[start:end]
 
-# linear_model(x_train, y_train)
-# fully_connected_model(x_train, y_train)
-for i, hyperparameters in enumerate(my_combinations):
-    print(f'Process {rank}: Training model {start+i+1}...')
+for i, hyperparameters in enumerate(tqdm(my_combinations, desc=f'Process {rank}', position=rank, leave=True)):
     cnn_model(x_train, y_train, hyperparameters)
