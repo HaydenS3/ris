@@ -26,15 +26,15 @@ conda install -c conda-forge mpi4py openmpi
 
 ## CNN Hyperparameters
 
-For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters:
+For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters. The current list of hyperparameters generates a total of 13,824 combinations.
 
 ### Architecture
 
 - **Number of Filters**: Number of filters in convolutional layers. [16, 32, 64, 128, 256]
-  <!-- - **Filter Size**: Dimensions of the filters applied in convolutional layers. [3x3, 5x5] -->
-  <!-- - **Number of Convolutional Layers**: Number of convolutional layers in the network. [2, 3, 4]
-- **Number of Convolutional Blocks**: A block consists of a convolutional layer followed by an activation function and pooling layer. [1, 2, 3] -->
-<!-- - **Activation Function**: Function applied to the output of each neuron, introducing non-linearity. [relu, sigmoid, tanh]
+    <!-- - **Filter Size**: Dimensions of the filters applied in convolutional layers. [3x3, 5x5] -->
+    <!-- - **Number of Convolutional Layers**: Number of convolutional layers in the network. [2, 3, 4]
+  <!-- - **Number of Convolutional Blocks**: A block consists of a convolutional layer followed by an activation function and pooling layer. [1, 2, 3] --> -->
+  <!-- - **Activation Function**: Function applied to the output of each neuron, introducing non-linearity. [relu, sigmoid, tanh]
 - **Pooling Type**: Type of pooling operation (e.g., max pooling, average pooling). [MaxPooling2D, AveragePooling2D] -->
 - **Number of Neurons in Dense Layers**: Number of neurons in fully connected layers. [64, 128, 256, 512]
   <!-- - **Number of Dense Layers**: Number of fully connected layers in the network. [1, 2, 3] -->
@@ -46,7 +46,7 @@ For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel pr
 <!-- - **Epochs**: Number of complete passes through the training dataset. [5, 10, 15, 20] -->
 - **Learning Rate**: Step size at each iteration while moving toward a minimum of the loss function. A high learning rate can lead to faster convergence but may overshoot the minimum. [0.001, 0.01, 0.1]
 - **Dropout Rate**: Fraction of the input units to drop during training to prevent overfitting. [0.2, 0.3, 0.4, 0.5]
-<!-- - **Validation Split**: Fraction of the training data to be used as validation data. [0.1, 0.2, 0.3] -->
+- **Validation Split**: Fraction of the training data to be used as validation data. [0.1, 0.2, 0.3]
 
 ## Reading & Sources (in order of complexity?)
 
