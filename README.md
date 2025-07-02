@@ -6,7 +6,7 @@ Author: Hayden Schroeder
 
 Need to test the RIS cluster and get a better understanding of how it works. I plan to use [Kaggle's Digit Recognizer challenge](https://www.kaggle.com/competitions/digit-recognizer/overview) to test the RIS cluster. I see two opportunities for parallelization using MPI:
 
-1. **Hyperparameter Tuning:** Generate 300+ hyperparameter combinations and run the jobs separately to find hyperparameters with the best performance.
+1. **Hyperparameter Tuning:** Generate 300+ hyperparameter combinations and run the jobs separately to find hyperparameters with the best performance. Going to pick somewhere between
 2. **Data Preprocessing:** Split up the dataset to perform preprocessing across multiple jobs.
 
 Use [MPI for Python](https://mpi4py.readthedocs.io/en/stable/overview.html) to implement the parallelization. The goal is to run the jobs on the RIS cluster and compare the performance with a single job run on a local machine. Further, here is a [parallel programming course which uses MPI](https://theartofhpc.com/pcse/index.html).
@@ -26,17 +26,27 @@ conda install -c conda-forge mpi4py openmpi
 
 ## CNN Hyperparameters
 
-- **Batch Size**: Number of training examples utilized in one iteration.
-- **Epochs**: Number of complete passes through the training dataset.
-- **Learning Rate**: Step size at each iteration while moving toward a minimum of the loss function. A high learning rate can lead to faster convergence but may overshoot the minimum.
-- **Number of Filters**: Number of filters in convolutional layers.
-- **Filter Size**: Dimensions of the filters applied in convolutional layers.
-- **Activation Function**: Function applied to the output of each neuron, introducing non-linearity.
-- **Dropout Rate**: Fraction of the input units to drop during training to prevent overfitting.
-- **Number of Neurons in Dense Layers**: Number of neurons in fully connected layers.
-- **Optimizer**: Algorithm used to update the weights of the network based on the loss function (e.g., Adam, SGD).
-- **Loss Function**: Function that measures the difference between predicted and actual values.
-- **Validation Split**: Fraction of the training data to be used as validation data.
+For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters:
+
+### Architecture
+
+- **Number of Filters**: Number of filters in convolutional layers. [16, 32, 64, 128, 256]
+  <!-- - **Filter Size**: Dimensions of the filters applied in convolutional layers. [3x3, 5x5] -->
+  <!-- - **Number of Convolutional Layers**: Number of convolutional layers in the network. [2, 3, 4]
+- **Number of Convolutional Blocks**: A block consists of a convolutional layer followed by an activation function and pooling layer. [1, 2, 3] -->
+<!-- - **Activation Function**: Function applied to the output of each neuron, introducing non-linearity. [relu, sigmoid, tanh]
+- **Pooling Type**: Type of pooling operation (e.g., max pooling, average pooling). [MaxPooling2D, AveragePooling2D] -->
+- **Number of Neurons in Dense Layers**: Number of neurons in fully connected layers. [64, 128, 256, 512]
+  <!-- - **Number of Dense Layers**: Number of fully connected layers in the network. [1, 2, 3] -->
+  <!-- - **Optimizer**: Algorithm used to update the weights of the network based on the loss function (e.g., Adam, SGD). [Adam, SGD, RMSprop] -->
+
+### Other
+
+- **Batch Size**: Number of training examples utilized in one iteration. [32, 64, 128, 256]
+<!-- - **Epochs**: Number of complete passes through the training dataset. [5, 10, 15, 20] -->
+- **Learning Rate**: Step size at each iteration while moving toward a minimum of the loss function. A high learning rate can lead to faster convergence but may overshoot the minimum. [0.001, 0.01, 0.1]
+- **Dropout Rate**: Fraction of the input units to drop during training to prevent overfitting. [0.2, 0.3, 0.4, 0.5]
+<!-- - **Validation Split**: Fraction of the training data to be used as validation data. [0.1, 0.2, 0.3] -->
 
 ## Reading & Sources (in order of complexity?)
 
@@ -56,7 +66,7 @@ The main reason for using CNNs is that regular neural networks don't scale well 
 
 ### CNN Layers
 
-- **Convolutional Layers**: Detect features in input images by applying filters. Generally, multiple layers are stacked and multiple filters are applied which get smaller in size as the network goes deeper.
+- **Convolutional Layers**: Detect features in input images by applying filters. Generally, multiple layers are stacked and multiple filters are applied. []
 - **Pooling Layers**: Reduce dimensionality and retain important features.
   - Max Pooling vs. Average Pooling: Max pooling is generally preferred as it retains the most significant features.
 - **Fully Connected Layers**: Connect every neuron in one layer to every neuron in the next layer, typically used at the end of the network.
