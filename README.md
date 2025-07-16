@@ -100,25 +100,37 @@ Presentation given by Ayush Chaturvedi. There's multiple ways to access and run 
 - **Job Group**: /h.schroeder/ood
 - **User Group**: compute-brianallen
 
-### [Job Groups](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Job-Groups)
+### Compute 1
+
+#### [Job Groups](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Job-Groups)
 
 Job groups limit jobs to N running jobs at a time and will queue jobs until resources are available.
 
 **If you do not supply a job group with the bsub -g argument, a default job group named /${compute_username}/default will be created. This group has a default of 5 jobs, meaning only 5 jobs will run at a time, even if you are not at the max vCPU of 500.**
 
-### [Arrays](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Arrays)
+#### [Arrays](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Arrays)
 
 When submitting a lot of similar jobs, they should submitted as an array. The maximum number of jobs in an array is 1000.
 
-### [Job Files](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#bsub-Job-Files)
+#### [Job Files](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#bsub-Job-Files)
 
 Nice way to store job configuration.
 
-### [Attach to Running Container](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Attach-to-an-Already-Running-Container)
+#### [Attach to Running Container](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Attach-to-an-Already-Running-Container)
 
 Useful if you need to do something after a job has started.
 
-### Compute 1 Methods
+#### [Parallel Jobs](https://washu.atlassian.net/wiki/x/SgCsZQ)
+
+For running parallel jobs.
+
+#### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
+
+Real-time monitoring of jobs. Can be used to monitor job progress and resource usage.
+
+#### [Software Development](https://washu.atlassian.net/wiki/x/HICCag)
+
+How to develop software on the RIS cluster.
 
 #### SSH
 
@@ -140,9 +152,12 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 ## TODOs
 
+- [ ] Try parallel computing
 - [ ] Try job groups and arrays
 - [ ] Try multiple different configuration options
   - [ ] Specify specific CPUs and memory limits
+- [ ] Try compute2
+- [ ] Try other things mentioned?
 - [ ] Add log file so I can see progress without interactive shell?
 - [ ] Create script version for GPU jobs?
 - [ ] Use pytorch instead of keras.
