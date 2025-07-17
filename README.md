@@ -34,16 +34,16 @@ If the test job works, you can run the main job using `mpirun -np <number_of_pro
 
 ### CNN Hyperparameters
 
-For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters. The current list of hyperparameters generates a total of 13,824 combinations.
+For hyperparameter tuning, we'll take advantage of the RIS cluster's parallel processing capabilities, and we will do a grid search over the following hyperparameters. The list of hyperparameters can be easily modifed to scale the amount of compute needed.
 
 #### Architecture
 
 - **Number of Filters**: Number of filters in convolutional layers. [16, 32, 64, 128, 256]
-    <!-- - **Filter Size**: Dimensions of the filters applied in convolutional layers. [3x3, 5x5] -->
-    <!-- - **Number of Convolutional Layers**: Number of convolutional layers in the network. [2, 3, 4]
-  <!-- - **Number of Convolutional Blocks**: A block consists of a convolutional layer followed by an activation function and pooling layer. [1, 2, 3] --> -->
-  <!-- - **Activation Function**: Function applied to the output of each neuron, introducing non-linearity. [relu, sigmoid, tanh]
-- **Pooling Type**: Type of pooling operation (e.g., max pooling, average pooling). [MaxPooling2D, AveragePooling2D] -->
+  <!-- - **Filter Size**: Dimensions of the filters applied in convolutional layers. [3x3, 5x5] -->
+  <!-- - **Number of Convolutional Layers**: Number of convolutional layers in the network. [2, 3, 4]
+    <!-- - **Number of Convolutional Blocks**: A block consists of a convolutional layer followed by an activation function and pooling layer. [1, 2, 3] --> -->
+    <!-- - **Activation Function**: Function applied to the output of each neuron, introducing non-linearity. [relu, sigmoid, tanh]
+  <!-- - **Pooling Type**: Type of pooling operation (e.g., max pooling, average pooling). [MaxPooling2D, AveragePooling2D] -->
 - **Number of Neurons in Dense Layers**: Number of neurons in fully connected layers. [64, 128, 256, 512]
   <!-- - **Number of Dense Layers**: Number of fully connected layers in the network. [1, 2, 3] -->
   <!-- - **Optimizer**: Algorithm used to update the weights of the network based on the loss function (e.g., Adam, SGD). [Adam, SGD, RMSprop] -->
@@ -127,8 +127,9 @@ For running parallel jobs.
 ```
 export LSF_DOCKER_NETWORK=host
 export LSF_DOCKER_IPC=host
-bsub -G compute-brianallen -n 10 -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/openmpi-python:3.10)'
 ```
+
+To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py`
 
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
@@ -158,6 +159,7 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 ## TODOs
 
+- [ ] Can I exit the ssh terminal without leaving the queue? Maybe run bsub in the background and have it email me when it's done?
 - [ ] Try parallel computing
 - [ ] Try job groups and arrays
 - [ ] Try multiple different configuration options

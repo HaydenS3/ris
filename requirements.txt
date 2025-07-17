@@ -1,5 +1,0 @@
-pandas
-tensorflow
-keras
-scikit-learn
-tqdm

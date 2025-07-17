@@ -17,13 +17,17 @@ import os
 import tensorflow as tf
 
 CNN_HYPERPARAMETERS = {
-    'conv_filters': [(16, 16), (16, 32), (32, 32), (32, 64), (64, 64), (64, 128)],
+    # 'conv_filters': [(16, 16), (16, 32), (32, 32), (32, 64), (64, 64), (64, 128)],
+    'conv_filters': [(32, 64)],
     'dense_units': [64, 128, 256, 512],
-    'batch_size': [32, 64, 128, 256],
-    'learning_rate': [0.001, 0.01, 0.1],
-    'dropout_rate1': [0.2, 0.3, 0.4, 0.5],
-    'dropout_rate2': [0.2, 0.3, 0.4, 0.5],
-    'validation_split': [0.1, 0.2, 0.3],
+    # 'learning_rate': [0.001, 0.01, 0.1],
+    'learning_rate': [0.001, 0.01],
+    # 'dropout_rate': [0.2, 0.3, 0.4, 0.5],
+    'dropout_rate': [0.3, 0.5],
+    # 'validation_split': [0.1, 0.2, 0.3],
+    'validation_split': [0.2],
+    # 'batch_size': [32, 64, 128, 256],
+    'batch_size': [64, 256],
 }
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0=all, 1=info, 2=warning, 3=error only
@@ -127,14 +131,14 @@ def cnn_model(x_train, y_train, hyperparameters):
     model.add(Convolution2D(hyperparameters['conv_filters'][0], (3, 3), activation='relu'))
     model.add(Convolution2D(hyperparameters['conv_filters'][0], (3, 3), activation='relu'))
     model.add(MaxPooling2D())
-    model.add(Dropout(hyperparameters['dropout_rate1']))
+    model.add(Dropout(hyperparameters['dropout_rate']))
     model.add(Convolution2D(hyperparameters['conv_filters'][1], (3, 3), activation='relu'))
     model.add(Convolution2D(hyperparameters['conv_filters'][1], (3, 3), activation='relu'))
     model.add(MaxPooling2D())
-    model.add(Dropout(hyperparameters['dropout_rate1']))
+    model.add(Dropout(hyperparameters['dropout_rate']))
     model.add(Flatten())
     model.add(Dense(hyperparameters['dense_units'], activation='relu'))
-    model.add(Dropout(hyperparameters['dropout_rate2']))
+    model.add(Dropout(hyperparameters['dropout_rate']))
     model.add(Dense(10, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer=Adam(
