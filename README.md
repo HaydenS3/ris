@@ -124,6 +124,12 @@ Useful if you need to do something after a job has started.
 
 For running parallel jobs.
 
+```
+export LSF_DOCKER_NETWORK=host
+export LSF_DOCKER_IPC=host
+bsub -G compute-brianallen -n 10 -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/openmpi-python:3.10)'
+```
+
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
 Real-time monitoring of jobs. Can be used to monitor job progress and resource usage.
