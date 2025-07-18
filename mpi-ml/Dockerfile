@@ -2,8 +2,6 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-COPY rismpi.py ./
-
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-pip \
@@ -27,7 +25,11 @@ RUN mkdir -p /app && chown mpiuser:mpiuser /app
 
 # Copy the script and set ownership
 COPY rismpi.py /app/
+COPY train.csv /app/
+COPY test.csv /app/
 RUN chown mpiuser:mpiuser /app/rismpi.py
+RUN chown mpiuser:mpiuser /app/train.csv
+RUN chown mpiuser:mpiuser /app/test.csv
 
 # Switch to the non-root user
 USER mpiuser
