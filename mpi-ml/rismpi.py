@@ -15,6 +15,7 @@ from mpi4py import MPI
 from tqdm import tqdm
 import os
 import tensorflow as tf
+import sys
 
 CNN_HYPERPARAMETERS = {
     # 'conv_filters': [(16, 16), (16, 32), (32, 32), (32, 64), (64, 64), (64, 128)],
@@ -37,6 +38,16 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
 
+# Parse command line arguments
+if len(sys.argv) != 3:
+    if rank == 0:
+        print("Usage: python rismpi.py <train.csv> <test.csv>")
+        print("Example: python rismpi.py train.csv test.csv")
+    sys.exit(1)
+
+train_file = sys.argv[1]
+test_file = sys.argv[2]
+
 
 def load_data():
     """
@@ -48,8 +59,8 @@ def load_data():
     """
 
     # Load datasets
-    train = pd.read_csv('train.csv')
-    x_test = pd.read_csv('test.csv')
+    train = pd.read_csv(train_file)
+    x_test = pd.read_csv(test_file)
 
     x_train = train.drop(columns=['label'])
     y_train = train['label']

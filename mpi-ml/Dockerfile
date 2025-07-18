@@ -20,13 +20,15 @@ RUN pip3 install --upgrade pip && pip3 install \
 # Create a non-root user
 RUN groupadd -r mpiuser && useradd -r -g mpiuser mpiuser
 
+RUN mkdir -p /app && chown mpiuser:mpiuser /app
+
 # Copy the script and set ownership
-COPY rismpi.py ./
-COPY train.csv ./
-COPY test.csv ./
-RUN chown mpiuser:mpiuser rismpi.py
-RUN chown mpiuser:mpiuser train.csv
-RUN chown mpiuser:mpiuser test.csv
+COPY rismpi.py /app/
+COPY train.csv /app/
+COPY test.csv /app/
+RUN chown mpiuser:mpiuser /app/rismpi.py
+RUN chown mpiuser:mpiuser /app/train.csv
+RUN chown mpiuser:mpiuser /app/test.csv
 
 # Switch to the non-root user
 USER mpiuser

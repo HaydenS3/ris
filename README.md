@@ -131,7 +131,7 @@ export LSF_DOCKER_NETWORK=host
 export LSF_DOCKER_IPC=host
 ```
 
-To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py`
+To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py /app/train.csv /app/test.csv`.
 
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
