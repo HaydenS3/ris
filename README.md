@@ -112,6 +112,8 @@ Job groups limit jobs to N running jobs at a time and will queue jobs until reso
 
 When submitting a lot of similar jobs, they should submitted as an array. The maximum number of jobs in an array is 1000.
 
+`bsub -J 'helloworld[1-100]' helloworld.sh \$LSB_JOBINDEX`
+
 #### [Job Files](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#bsub-Job-Files)
 
 Nice way to store job configuration.
@@ -140,6 +142,8 @@ Real-time monitoring of jobs. Can be used to monitor job progress and resource u
 How to develop software on the RIS cluster.
 
 #### SSH
+
+`ssh h.schroeder@compute1-client-3.ris.wustl.edu `
 
 Open a basic interactive session with Python 3.10: `bsub -G compute-brianallen -Is -q general-interactive -a 'docker(python:3.10)' /bin/bash`
 
