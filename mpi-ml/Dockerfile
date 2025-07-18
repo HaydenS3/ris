@@ -34,5 +34,12 @@ RUN chown mpiuser:mpiuser /app/test.csv
 # Switch to the non-root user
 USER mpiuser
 
-# Set working directory
-WORKDIR /app
+# Add at the end of your Dockerfile
+COPY <<EOF /app/entrypoint.sh
+#!/bin/bash
+cd /app
+exec "$@"
+EOF
+
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
