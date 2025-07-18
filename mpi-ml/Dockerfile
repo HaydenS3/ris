@@ -31,15 +31,15 @@ RUN chown mpiuser:mpiuser /app/rismpi.py
 RUN chown mpiuser:mpiuser /app/train.csv
 RUN chown mpiuser:mpiuser /app/test.csv
 
-# Switch to the non-root user
-USER mpiuser
-
-# Add at the end of your Dockerfile
 COPY <<EOF /app/entrypoint.sh
 #!/bin/bash
 cd /app
-exec "$@"
 EOF
 
-RUN chmod +x /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh && chown mpiuser:mpiuser /app/entrypoint.sh
+
+# Switch to the non-root user
+USER mpiuser
+
 ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["/bin/bash"]
