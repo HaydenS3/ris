@@ -135,6 +135,8 @@ To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]
 
 Big test: `bsub -G compute-brianallen -n 8 -R 'affinity[core(1)] span[ptile=1] rusage[mem=16GB]' -M 15GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv`
 
+GPU test: `bsub -G compute-brianallen -R 'gpuhost' -gpu 'num=1:gmodel=NVIDIAA40:gmem=8G' -M 8GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun python3 /app/rismpi.py /app/train.csv /app/test.csv`
+
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
 Real-time monitoring of jobs. Can be used to monitor job progress and resource usage.
