@@ -135,7 +135,7 @@ To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]
 
 Big test: `bsub -G compute-brianallen -n 8 -R 'affinity[core(1)] span[ptile=1] rusage[mem=16GB]' -M 15GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv`
 
-GPU test: `bsub -G compute-brianallen -R 'gpuhost' -gpu 'num=1:gmodel=NVIDIAA40:gmem=8G' -M 8GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun python3 /app/rismpi.py /app/train.csv /app/test.csv`
+GPU test: `bsub -G compute-brianallen -R 'gpuhost' -gpu 'num=1:gmodel=NVIDIAA40:gmem=8G' -M 8GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml-gpu)' mpirun python3 /app/rismpigpu.py /app/train.csv /app/test.csv`
 
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
@@ -172,7 +172,8 @@ Tried accessing storage through Globulus, but my permission was denied when load
 - [x] Run big job, monitor job via RTM, get email once job finishes
 - [x] Try multiple different configuration options
 - [ ] Try compute2
-- [ ] Create script version for GPU jobs?
+- [x] Create script version for GPU jobs?
+- [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
 - [ ] Improve CNN architecture. Add batch normalization layers to the model. Add early stopping to prevent overfitting.
