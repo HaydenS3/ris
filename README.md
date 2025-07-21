@@ -112,7 +112,7 @@ Job groups limit jobs to N running jobs at a time and will queue jobs until reso
 
 When submitting a lot of similar jobs, they should submitted as an array. The maximum number of jobs in an array is 1000.
 
-`bsub -J 'helloworld[1-100]' helloworld.sh \$LSB_JOBINDEX`
+`bsub -J 'helloworld[1-100]' helloworld.sh \$LSB_JOBINDEX`. You have to specify a docker container too. `bsub -J 'helloworld[1-4]' -a 'docker(ubuntu:22.04)' /bin/echo \$LSB_JOBINDEX`
 
 #### [Job Files](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#bsub-Job-Files)
 
@@ -131,7 +131,9 @@ export LSF_DOCKER_NETWORK=host
 export LSF_DOCKER_IPC=host
 ```
 
-To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py /app/train.csv /app/test.csv`.
+To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1] rusage[mem=8GB]' -M 7GB -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py /app/train.csv /app/test.csv`.
+
+Big test: `bsub -G compute-brianallen -n 8 -R 'affinity[core(1)] span[ptile=1] rusage[mem=16GB]' -M 15GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv`
 
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
@@ -163,14 +165,11 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 ## TODOs
 
-- [ ] Can I exit the ssh terminal without leaving the queue? Maybe run bsub in the background and have it email me when it's done?
-- [ ] Try parallel computing
-- [ ] Try job groups and arrays
-- [ ] Try multiple different configuration options
-  - [ ] Specify specific CPUs and memory limits
+- [x] Try parallel computing
+- [x] Try job groups and arrays
+- [x] Run big job, monitor job via RTM, get email once job finishes
+- [x] Try multiple different configuration options
 - [ ] Try compute2
-- [ ] Try other things mentioned?
-- [ ] Add log file so I can see progress without interactive shell?
 - [ ] Create script version for GPU jobs?
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
