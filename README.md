@@ -91,16 +91,16 @@ The main reason for using CNNs is that regular neural networks don't scale well 
 
 ## RIS
 
-### Onboarding
-
-Presentation given by Ayush Chaturvedi. There's multiple ways to access and run jobs on the RIS cluster. Would be good to try them all. Documentation on Confluence. Different batch operating systems to try. RIS is all in on Docker. They have a dedicated help desk.
-
 ### Access Information
 
 - **Job Group**: /h.schroeder/ood
 - **User Group**: compute-brianallen
 
-### Compute 1
+### [Compute 1](https://washu.atlassian.net/wiki/x/EgCSZw)
+
+#### Onboarding
+
+Presentation given by Ayush Chaturvedi. There's multiple ways to access and run jobs on the RIS cluster. Would be good to try them all. Documentation on Confluence. Different batch operating systems to try. RIS is all in on Docker. They have a dedicated help desk.
 
 #### [Job Groups](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#Job-Groups)
 
@@ -112,7 +112,7 @@ Job groups limit jobs to N running jobs at a time and will queue jobs until reso
 
 When submitting a lot of similar jobs, they should submitted as an array. The maximum number of jobs in an array is 1000.
 
-`bsub -J 'helloworld[1-100]' helloworld.sh \$LSB_JOBINDEX`. You have to specify a docker container too. `bsub -J 'helloworld[1-4]' -a 'docker(ubuntu:22.04)' /bin/echo \$LSB_JOBINDEX`
+`bsub -J 'helloworld[1-5]' helloworld.sh \$LSB_JOBINDEX`. You have to specify a docker container too. `bsub -J 'helloworld[1-4]' -a 'docker(ubuntu:22.04)' /bin/echo \$LSB_JOBINDEX`
 
 #### [Job Files](https://washu.atlassian.net/wiki/spaces/RUD/pages/1705182249/Job+Execution+Examples#bsub-Job-Files)
 
@@ -131,11 +131,11 @@ export LSF_DOCKER_NETWORK=host
 export LSF_DOCKER_IPC=host
 ```
 
-To test run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np X python3 /app/mpitest.py` and for ML project run `bsub -G compute-brianallen -n X -R 'affinity[core(1)] span[ptile=1] rusage[mem=8GB]' -M 7GB -I -q general-interactive -a 'docker(haydenschroeder/mpi-ml)' mpirun -np X python3 /app/rismpi.py /app/train.csv /app/test.csv`.
+To test run: `bsub -G compute-brianallen -n 2 -R 'affinity[core(1)] span[ptile=1]' -I -q general-interactive -a 'docker(haydenschroeder/mpi-test)' mpirun -np 2 python3 /app/mpitest.py`
 
-Big test: `bsub -G compute-brianallen -n 8 -R 'affinity[core(1)] span[ptile=1] rusage[mem=16GB]' -M 15GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv`
+For ML project run: `bsub -G compute-brianallen -n 8 -R 'affinity[core(1)] span[ptile=1] rusage[mem=16GB]' -M 15GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml)' mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv`
 
-GPU test: `bsub -G compute-brianallen -R 'gpuhost' -gpu 'num=1:gmodel=NVIDIAA40:gmem=8G' -M 8GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml-gpu)' mpirun python3 /app/rismpigpu.py /app/train.csv /app/test.csv`
+For ML project on GPU run: `bsub -G compute-brianallen -R 'gpuhost' -gpu 'num=1:gmodel=NVIDIAA40:gmem=8G' -M 8GB -N -u h.schroeder@wustl.edu -q general -a 'docker(haydenschroeder/mpi-ml-gpu)' mpirun python3 /app/rismpigpu.py /app/train.csv /app/test.csv`
 
 #### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/x/I4Fwag)
 
@@ -155,6 +155,67 @@ Open a basic interactive session with Python 3.10: `bsub -G compute-brianallen -
 
 Jupyter Notebook. Works fine, seems like you can't run parallel jobs on OOD. You can run a single job, but it will be limited to the resources of the node you are on. This is good for testing and debugging, but not for running large jobs.
 
+### [Compute 2](https://washu.atlassian.net/wiki/x/XwBRZw)
+
+#### Onboarding
+
+Video recording of presentation. Communications and help happens via the #compute2-early-adopters Slack channel. Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
+
+#### Transitioning
+
+Use slurm instead of lsf; documentation is good for this and they've included a translator for the extremely lazy. Easier to run bare-metal jobs, however containers are certainly recommended. Compute2 is still early access; documentation is incomplete.
+
+#### SSH
+
+`ssh h.schroeder@c2-login-003.ris.wustl.edu`
+
+Basicest test: `srun -p general-short /bin/bash helloworld.sh`
+
+#### Arrays
+
+`sbatch -p general-short --array=1-5 /bin/bash helloworld.sh`
+
+#### [Parallel Jobs](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145517787/Compute2+MPI)
+
+To test run: `srun -p general-short --mpi=pmix -N 2 -t 5 --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
+
+For ML project make script:
+
+```
+#!/bin/bash
+#SBATCH -p general-cpu
+#SBATCH -N 8
+#SBATCH -t 120
+#SBATCH --mem=16G
+#SBATCH --container-image=haydenschroeder/mpi-ml
+srun --mpi=pmix mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv
+```
+
+Then run: `sbatch rismpi.sh`
+
+For ML project on GPU make script:
+
+```
+#!/bin/bash
+#SBATCH -p general-gpu
+#SBATCH -N 1
+#SBATCH -t 120
+#SBATCH --gpus=1
+#SBATCH --mem=4G
+#SBATCH --container-image=haydenschroeder/mpi-ml-gpu
+srun --mpi=pmix mpirun python3 /app/rismpigpu.py /app/train.csv /app/test.csv
+```
+
+Then run: `sbatch rismpigpu.sh`
+
+#### [Real-Time Monitoring (RTM)](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145976581/Monitoring+Jobs+and+Partitions+Queues)
+
+No nice user interface for compute2. Must use CLI.
+
+#### [Open On Demand (OOD)](https://washu.atlassian.net/wiki/spaces/RUD/pages/2206924821/C2+Open+OnDemand+OOD)
+
+Updated for compute2.
+
 ### Storage
 
 Tried accessing storage through Globulus, but my permission was denied when loading `storage1` or `storage2` from the RIS Storage1 collection.
@@ -171,9 +232,13 @@ Tried accessing storage through Globulus, but my permission was denied when load
 - [x] Try job groups and arrays
 - [x] Run big job, monitor job via RTM, get email once job finishes
 - [x] Try multiple different configuration options
-- [ ] Try compute2
+- [ ] Try compute2. Emailed Ayush for access 7/22
 - [x] Create script version for GPU jobs?
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
 - [ ] Improve CNN architecture. Add batch normalization layers to the model. Add early stopping to prevent overfitting.
+
+```
+
+```
