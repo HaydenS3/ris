@@ -91,12 +91,12 @@ The main reason for using CNNs is that regular neural networks don't scale well 
 
 ## RIS
 
-### Access Information
+### [Compute 1](https://washu.atlassian.net/wiki/x/EgCSZw)
+
+#### Access Information
 
 - **Job Group**: /h.schroeder/ood
 - **User Group**: compute-brianallen
-
-### [Compute 1](https://washu.atlassian.net/wiki/x/EgCSZw)
 
 #### Onboarding
 
@@ -157,6 +157,10 @@ Jupyter Notebook. Works fine, seems like you can't run parallel jobs on OOD. You
 
 ### [Compute 2](https://washu.atlassian.net/wiki/x/XwBRZw)
 
+#### Access Information
+
+- **User Group**: compute2-brainallen
+
 #### Onboarding
 
 Video recording of presentation. Communications and help happens via the #compute2-early-adopters Slack channel. Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
@@ -173,11 +177,22 @@ Basicest test: `srun -p general-short /bin/bash helloworld.sh`
 
 #### Arrays
 
-`sbatch -p general-short --array=1-5 /bin/bash helloworld.sh`
+`sbatch -p general-short --array=1-5 helloworld.sh`
 
 #### [Parallel Jobs](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145517787/Compute2+MPI)
 
-To test run: `srun -p general-short --mpi=pmix -N 2 -t 5 --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
+For test run make script:
+
+```
+#!/bin/bash
+#SBATCH -p general-cpu
+#SBATCH -N 2
+#SBATCH -t 5
+#SBATCH --container-image=haydenschroeder/mpi-test
+srun --mpi=pmix -np 2 python3 /app/mpitest.py
+```
+
+Then run: `sbatch mpitest.sh`
 
 For ML project make script:
 
