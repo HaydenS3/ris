@@ -163,7 +163,7 @@ Jupyter Notebook. Works fine, seems like you can't run parallel jobs on OOD. You
 
 #### Onboarding
 
-Video recording of presentation. Communications and help happens via the #compute2-early-adopters Slack channel. Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
+Video recording of presentation. Communications and help happens via [the #compute2-early-adopters Slack channel](https://app.slack.com/client/TJGKAPR41/C08G3T0DPUY). Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
 
 #### Transitioning
 
@@ -181,7 +181,7 @@ Basicest test: `srun -p general-short /bin/bash helloworld.sh`
 
 #### [Parallel Jobs](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145517787/Compute2+MPI)
 
-For test run make script:
+For test run make script: `srun -p general-short -N 2 -t 5 --mpi=pmix --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
 
 ```
 #!/bin/bash
@@ -189,12 +189,12 @@ For test run make script:
 #SBATCH -N 2
 #SBATCH -t 5
 #SBATCH --container-image=haydenschroeder/mpi-test
-srun --mpi=pmix -np 2 python3 /app/mpitest.py
+mpirun -np 2 python3 /app/mpitest.py
 ```
 
 Then run: `sbatch mpitest.sh`
 
-For ML project make script:
+For ML project make script
 
 ```
 #!/bin/bash
@@ -241,6 +241,18 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 #### Storage2
 
+## Findings for Brian
+
+- Learning compute1 took some time, mainly because I was learning how to build my own docker container, but wasn't too bad. Linux CLI experience helped a lot.
+- Explored interactive sessions, job arrays, parallel jobs using MPI, open on demand, and real-time monitoring
+- Used both CPU and GPU jobs. Show results
+- Learning compute2 was super easy after learning compute1. The documentation is good and the transition from lsf to slurm is easy.
+- RIS is all-in on Docker, but compute2 supports running bare-metal jobs
+- Ran into issue on compute2 with MPI jobs. Unfortunately, I lost access to the support Slack channel yesterday. I have no idea what happened.
+- Compute2 doesn't have a nice user interface for real-time monitoring, but the CLI works fine.
+- Live demo if Brian wants any?
+- Didn't use storage1 or storage2, but it seems pretty straightforward to use. Globus offers a nice GUI for transferring files.
+
 ## TODOs
 
 - [x] Try parallel computing
@@ -253,7 +265,3 @@ Tried accessing storage through Globulus, but my permission was denied when load
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
 - [ ] Improve CNN architecture. Add batch normalization layers to the model. Add early stopping to prevent overfitting.
-
-```
-
-```
