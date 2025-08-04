@@ -163,7 +163,7 @@ Jupyter Notebook. Works fine, seems like you can't run parallel jobs on OOD. You
 
 #### Onboarding
 
-Video recording of presentation. Communications and help happens via [the #compute2-early-adopters Slack channel](https://app.slack.com/client/TJGKAPR41/C08G3T0DPUY). Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
+Video recording of presentation. Communications and help happens via [the #compute2-early-adopters Slack channel](https://app.slack.com/client/TJGKAPR41/C08G3T0DPUY). **You need a paid SLack account to access the support channel.** Uses slurm scheduler instead of lsf. Documentation will probably be incomplete, still early access.
 
 #### Transitioning
 
@@ -255,6 +255,7 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 ## TODOs
 
+- Brian wants to meet with those guys on the 11th. Try to give him and update by the 6th.
 - [x] Try parallel computing
 - [x] Try job groups and arrays
 - [x] Run big job, monitor job via RTM, get email once job finishes
