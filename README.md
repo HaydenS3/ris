@@ -183,6 +183,16 @@ Basicest test: `srun -p general-short /bin/bash helloworld.sh`
 
 For test run make script: `srun -p general-short -N 2 -t 5 --mpi=pmix --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
 
+Try to run using modules and bare-metal:
+
+```
+module load ris openmpi slurm
+export OMPI_MCA_accelerator=^cuda
+export OMPI_MCA_btl=^smcuda
+export OMPI_MCA_rcache=^gpusm,rgpusm
+srun -p general-short -N 2 -t 5 --mpi=pmix mpirun -np 2 python3 mpitest.py
+```
+
 ```
 #!/bin/bash
 #SBATCH -p general-cpu
@@ -237,9 +247,15 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 "In summary, a user must be a member of a Wash U AD group like storage-\* to see data via Globus. First a user should confirm access via SMB. If that works, the same storage volume should be visible in the Globus application." [Source](https://washu.atlassian.net/wiki/spaces/RUD/pages/1795948625/Storage1+Access+Control#Wash-U-Active-Directory-Groups)
 
+`/storage1/fs1/brianallen/Active` and `/storage2/fs1/brianallen/Active`
+
 #### Storage1
 
+Unable to access.
+
 #### Storage2
+
+Works great, able to upload files via Globus and view. Able to access it using jobs too: `srun -p general-interactive /bin/ls /storage2/fs1/brianallen/Active`
 
 ## Findings for Brian
 
