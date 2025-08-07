@@ -276,8 +276,9 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - [x] Try job groups and arrays
 - [x] Run big job, monitor job via RTM, get email once job finishes
 - [x] Try multiple different configuration options
-- [ ] Try compute2. Emailed Ayush for access 7/22
+- [x] Try compute2. Emailed Ayush for access 7/22
 - [x] Create script version for GPU jobs?
+- [ ] Need to mount storage2 to Docker container in order to access within container job
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
