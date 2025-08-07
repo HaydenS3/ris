@@ -3,7 +3,7 @@ from tqdm import tqdm
 import time
 import numpy as np
 from datetime import datetime
-
+import sys
 
 OPERATION_TIME = 1
 NUM_OPERATIONS = 10
@@ -11,6 +11,14 @@ NUM_OPERATIONS = 10
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
+
+# Check for file path argument
+if len(sys.argv) != 2:
+    if rank == 0:
+        print("Usage: mpirun -n <num_processes> python mpitest.py <output_file_path>")
+    sys.exit(1)
+
+output_file_path = sys.argv[1]
 
 
 def perform_operation():
@@ -48,9 +56,9 @@ else:
 
 if rank == 0 and best_rank == 0:
     print(f"Process {rank} will save its model with result {global_best:.4f}")
-    with open(f"best_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", "w") as f:
+    with open(output_file_path, "w") as f:
         f.write(f"Best result: {best_result:.4f} from process {rank}\n")
 
 elif rank != 0 and should_save:
-    with open(f"best_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt", "w") as f:
+    with open(output_file_path, "w") as f:
         f.write(f"Best result: {best_result:.4f} from process {rank}\n")
