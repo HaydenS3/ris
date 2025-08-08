@@ -1,20 +1,24 @@
-FROM ubuntu:22.04
+# Use NVIDIA's CUDA runtime image as base
+FROM nvidia/cuda:11.8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-pip \
     openmpi-bin \
-    libopenmpi-dev
+    libopenmpi-dev \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install Python packages with GPU support
 RUN pip3 install --upgrade pip && pip3 install \
     mpi4py \
     tqdm \
     numpy \
     pandas \
-    tensorflow \
-    keras \
+    tensorflow[and-cuda] \
     scikit-learn
 
 # Create a non-root user
