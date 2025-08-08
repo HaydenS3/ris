@@ -21,6 +21,7 @@ RUN pip3 install --upgrade pip && pip3 install \
 RUN groupadd -r mpiuser && useradd -r -g mpiuser mpiuser
 
 RUN mkdir -p /app && chown mpiuser:mpiuser /app
+RUN mkdir -p /app/store && chown mpiuser:mpiuser /app/store
 
 # Copy the script and set ownership
 COPY rismpigpu.py /app/
