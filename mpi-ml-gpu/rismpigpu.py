@@ -75,8 +75,9 @@ if len(sys.argv) != 3:
         print("Example: python rismpigpu.py train.csv test.csv")
     sys.exit(1)
 
-train_file = sys.argv[1]
-test_file = sys.argv[2]
+train_file = '/app/train.csv'
+test_file = '/app/test.csv'
+out_dir = '/app/store'
 
 
 def load_data():
@@ -311,10 +312,12 @@ if rank == 0:
 else:
     should_save = comm.recv(source=0, tag=33)
 
+file = f'{out_dir}/best_model_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.keras'
+
 if rank == 0 and best_rank == 0:
-    best_model.save(f'best_cnn_model_gpu_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.keras')
+    best_model.save(file)
 elif rank != 0 and should_save:
-    best_model.save(f'best_cnn_model_gpu_{rank}_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.keras')
+    best_model.save(file)
 
 if rank == 0:
     print("GPU-accelerated training completed!")
