@@ -38,7 +38,8 @@ if gpus:
     except RuntimeError as e:
         print(f"GPU configuration error: {e}")
 else:
-    print("No GPU devices found. Running on CPU.")
+    print("No GPU devices found. Exiting")
+    sys.exit(1)
 
 # Create a GPU strategy for distributed training if multiple GPUs are available
 if len(gpus) > 1:
@@ -67,13 +68,6 @@ tf.get_logger().setLevel('ERROR')
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
-
-# Parse command line arguments
-if len(sys.argv) != 3:
-    if rank == 0:
-        print("Usage: python rismpigpu.py <train.csv> <test.csv>")
-        print("Example: python rismpigpu.py train.csv test.csv")
-    sys.exit(1)
 
 train_file = '/app/train.csv'
 test_file = '/app/test.csv'
