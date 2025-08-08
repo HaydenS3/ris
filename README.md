@@ -185,24 +185,17 @@ Some documentation on using containers in compute2.
 
 #### [Parallel Jobs](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145517787/Compute2+MPI)
 
-For test run make script: `srun -p general-short -N 2 -t 5 --mpi=pmix --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
-
-Try to run using modules and bare-metal:
-
-```
-module load ris openmpi slurm
-export OMPI_MCA_accelerator=^cuda
-export OMPI_MCA_btl=^smcuda
-export OMPI_MCA_rcache=^gpusm,rgpusm
-srun -p general-short -N 2 -t 5 --mpi=pmix mpirun -np 2 python3 mpitest.py
-```
+For test run make script:
 
 ```
 #!/bin/bash
-#SBATCH -p general-cpu
-#SBATCH -N 2
-#SBATCH -t 5
+#SBATCH --partition=general-short
+#SBATCH --nodes=2
+#SBATCH --time=5
 #SBATCH --container-image=haydenschroeder/mpi-test
+#SBATCH --container-mounts=/cm,/etc/passwd,/lib64/libmunge.so.2,/run/munge,/storage2/fs1/brianallen/Active:/app/store
+#SBATCH --container-env=PATH,SLURM_CONF
+#SBATCH --container-writable
 mpirun -np 2 python3 /app/mpitest.py
 ```
 
@@ -212,12 +205,15 @@ For ML project make script
 
 ```
 #!/bin/bash
-#SBATCH -p general-cpu
-#SBATCH -N 8
-#SBATCH -t 120
+#SBATCH --partition=general-cpu
+#SBATCH --nodes=8
+#SBATCH --time=120
 #SBATCH --mem=16G
 #SBATCH --container-image=haydenschroeder/mpi-ml
-srun --mpi=pmix mpirun -np 8 python3 /app/rismpi.py /app/train.csv /app/test.csv
+#SBATCH --container-mounts=/cm,/etc/passwd,/lib64/libmunge.so.2,/run/munge,/storage2/fs1/brianallen/Active:/app/store
+#SBATCH --container-env=PATH,SLURM_CONF
+#SBATCH --container-writable
+srun --mpi=pmix mpirun -np 8 python3 /app/rismpi.py
 ```
 
 Then run: `sbatch rismpi.sh`
@@ -282,8 +278,7 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - [x] Try multiple different configuration options
 - [x] Try compute2. Emailed Ayush for access 7/22
 - [x] Create script version for GPU jobs?
-- [ ] Try mounting storage2 to a container
-- [ ] Can I output my "best_model" file to the home directory?
+- [x] Try mounting storage2 to a container
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
