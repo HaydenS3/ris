@@ -179,6 +179,10 @@ Basicest test: `srun -p general-short /bin/bash helloworld.sh`
 
 `sbatch -p general-short --array=1-5 helloworld.sh`
 
+#### [Using Containers](https://washu.atlassian.net/wiki/spaces/RUD/pages/1720615105/Compute2+Quickstart#Using-Containers)
+
+Some documentation on using containers in compute2.
+
 #### [Parallel Jobs](https://washu.atlassian.net/wiki/spaces/RUD/pages/2145517787/Compute2+MPI)
 
 For test run make script: `srun -p general-short -N 2 -t 5 --mpi=pmix --container-image=haydenschroeder/mpi-test mpirun -np 2 python3 /app/mpitest.py`
@@ -278,7 +282,8 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - [x] Try multiple different configuration options
 - [x] Try compute2. Emailed Ayush for access 7/22
 - [x] Create script version for GPU jobs?
-- [ ] Need to mount storage2 to Docker container in order to access within container job
+- [ ] Try mounting storage2 to a container
+- [ ] Can I output my "best_model" file to the home directory?
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model

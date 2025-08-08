@@ -13,12 +13,10 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # Check for file path argument
-if len(sys.argv) != 2:
-    if rank == 0:
-        print("Usage: mpirun -n <num_processes> python mpitest.py <out_directory>")
-    sys.exit(1)
-
-out_directory = sys.argv[1]
+if len(sys.argv) == 2:
+    out_directory = sys.argv[1]
+else:
+    out_directory = "./app/store"
 
 
 def perform_operation():

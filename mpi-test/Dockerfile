@@ -19,14 +19,14 @@ RUN pip3 install --upgrade pip && pip3 install \
 RUN groupadd -r mpiuser && useradd -r -g mpiuser mpiuser
 
 # Create a working directory and set ownership
-RUN mkdir -p /app && chown mpiuser:mpiuser /app
+RUN mkdir -p ./app && chown mpiuser:mpiuser ./app
+
+# Create mount point for external storage
+RUN mkdir -p ./app/store && chown mpiuser:mpiuser ./app/store
 
 # Copy the script and set ownership
-COPY mpitest.py /app/
-RUN chown mpiuser:mpiuser /app/mpitest.py
+COPY mpitest.py ./app/
+RUN chown mpiuser:mpiuser ./app/mpitest.py ./app/store
 
 # Switch to the non-root user
 USER mpiuser
-
-# Set working directory
-WORKDIR /app
