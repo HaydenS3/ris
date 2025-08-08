@@ -16,7 +16,9 @@ size = comm.Get_size()
 if len(sys.argv) == 2:
     out_directory = sys.argv[1]
 else:
-    out_directory = "./app/store"
+    out_directory = "/app/store"
+
+file = f'{out_directory}/best_model_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
 
 
 def perform_operation():
@@ -50,13 +52,13 @@ if rank == 0:
 else:
     should_save = comm.recv(source=0, tag=33)  # Blocking
     if should_save:
-        print(f"Process {rank} will save its model with result {best_result:.4f}")
+        print(f"Process {rank} will save its model with result {best_result:.4f} to {file}")
 
 if rank == 0 and best_rank == 0:
-    print(f"Process {rank} will save its model with result {global_best:.4f}")
-    with open(f'{out_directory}/best_model_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt', "w") as f:
+    print(f"Process {rank} will save its model with result {global_best:.4f} to {file}")
+    with open(file, "w") as f:
         f.write(f"Best result: {best_result:.4f} from process {rank}\n")
 
 elif rank != 0 and should_save:
-    with open(f'{out_directory}/best_model_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt', "w") as f:
+    with open(file, "w") as f:
         f.write(f"Best result: {best_result:.4f} from process {rank}\n")
