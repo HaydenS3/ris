@@ -256,7 +256,7 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 Unable to access.
 
-#### Storage2
+[#### Storage2](https://washu.atlassian.net/wiki/x/H4ADaw)
 
 Works great, able to upload files via Globus and view. Able to access it using jobs too: `srun -p general-interactive /bin/ls /storage2/fs1/brianallen/Active`
 
@@ -271,6 +271,23 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - Compute2 doesn't have a nice user interface for real-time monitoring, but the CLI works fine.
 - Live demo if Brian wants any?
 - Didn't use storage1 or storage2, but it seems pretty straightforward to use. Globus offers a nice GUI for transferring files.
+
+## Meeting with Genomics Compute
+
+### Recommendations
+
+- Containers will make the transition to compute2 easier, less risk of breaking things. Compute2 does however support running bare-metal jobs.
+
+### Questions
+
+- Would like to understand differences between genomics compute and compute2.
+  - Scheduler is slurm?
+  - Containers?
+  - Access to storage?
+  - Running parallel jobs?
+  - Monitoring jobs?
+  - Interactive vs. batch jobs?
+  - CPU vs. GPU?
 
 ## TODOs
 
