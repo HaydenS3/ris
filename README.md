@@ -201,7 +201,7 @@ mpirun -np 2 python3 /app/mpitest.py
 
 Then run: `sbatch mpitest.sh`
 
-For ML project make script
+For ML project make script:
 
 ```
 #!/bin/bash
@@ -214,6 +214,21 @@ For ML project make script
 #SBATCH --container-env=PATH,SLURM_CONF
 #SBATCH --container-writable
 mpirun -np 8 python3 /app/rismpi.py
+```
+
+For ML project big version make script:
+
+```
+#!/bin/bash
+#SBATCH --partition=general-cpu
+#SBATCH --nodes=16
+#SBATCH --time=120
+#SBATCH --mem=32G
+#SBATCH --container-image=haydenschroeder/mpi-ml:big
+#SBATCH --container-mounts=/cm,/etc/passwd,/lib64/libmunge.so.2,/run/munge,/storage2/fs1/brianallen/Active:/app/store
+#SBATCH --container-env=PATH,SLURM_CONF
+#SBATCH --container-writable
+mpirun -np 16 python3 /app/rismpi.py
 ```
 
 Then run: `sbatch rismpi.sh`
@@ -299,6 +314,7 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - [x] Try compute2. Emailed Ayush for access 7/22
 - [x] Create script version for GPU jobs?
 - [x] Try mounting storage2 to a container
+- [ ] Run a BIG job. More hyperparameters, how many cores can I use, how much memory, how long does queue take?
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
