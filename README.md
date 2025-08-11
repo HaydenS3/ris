@@ -216,6 +216,8 @@ For ML project make script:
 mpirun -np 8 python3 /app/rismpi.py
 ```
 
+Then run: `sbatch rismpi.sh`
+
 For ML project big version make script:
 
 ```
@@ -231,7 +233,7 @@ For ML project big version make script:
 mpirun -np 16 python3 /app/rismpi.py
 ```
 
-Then run: `sbatch rismpi.sh`
+Then run: `sbatch rismpibig.sh`
 
 For ML project on GPU make script:
 
@@ -306,15 +308,8 @@ Works great, able to upload files via Globus and view. Able to access it using j
 
 ## TODOs
 
-- Brian wants to meet with those guys on the 11th. Try to give him and update by the 6th.
-- [x] Try parallel computing
-- [x] Try job groups and arrays
-- [x] Run big job, monitor job via RTM, get email once job finishes
-- [x] Try multiple different configuration options
-- [x] Try compute2. Emailed Ayush for access 7/22
-- [x] Create script version for GPU jobs?
-- [x] Try mounting storage2 to a container
 - [ ] Run a BIG job. More hyperparameters, how many cores can I use, how much memory, how long does queue take?
+- [ ] Run a GPU job
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
 - [ ] Add image augmentation to the model
