@@ -223,14 +223,14 @@ For ML project big version make script:
 ```
 #!/bin/bash
 #SBATCH --partition=general-cpu
-#SBATCH --nodes=16
+#SBATCH --nodes=32
 #SBATCH --time=120
-#SBATCH --mem=32G
+#SBATCH --mem=64G
 #SBATCH --container-image=haydenschroeder/mpi-ml:big
 #SBATCH --container-mounts=/cm,/etc/passwd,/lib64/libmunge.so.2,/run/munge,/storage2/fs1/brianallen/Active:/app/store
 #SBATCH --container-env=PATH,SLURM_CONF
 #SBATCH --container-writable
-mpirun -np 16 python3 /app/rismpi.py
+mpirun -np 32 python3 /app/rismpi.py
 ```
 
 Then run: `sbatch rismpibig.sh`

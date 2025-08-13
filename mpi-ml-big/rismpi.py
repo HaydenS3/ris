@@ -27,8 +27,8 @@ CNN_HYPERPARAMETERS = {
     # 'dropout_rate': [0.3, 0.5],
     # 'validation_split': [0.1, 0.2, 0.3],
     'validation_split': [0.2],
-    # 'batch_size': [32, 64, 128, 256],
-    'batch_size': [64, 256],
+    'batch_size': [32, 64, 128, 256],
+    # 'batch_size': [64, 256],
 }
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # 0=all, 1=info, 2=warning, 3=error only
