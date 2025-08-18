@@ -261,6 +261,10 @@ No nice user interface for compute2. Must use CLI.
 
 Updated for compute2.
 
+#### Running Jobs
+
+16 nodes and 32 GB ran in about an hour. 32 nodes and 64 GB took a couple days before it ran.
+
 ### Storage
 
 Tried accessing storage through Globulus, but my permission was denied when loading `storage1` or `storage2` from the RIS Storage1 collection.
