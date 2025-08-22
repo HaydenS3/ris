@@ -199,7 +199,7 @@ For test run make script:
 mpirun -np 2 python3 /app/mpitest.py
 ```
 
-Then run: `sbatch mpitest.sh`
+Then run: `sbatch mpitest.sh` 10.227.231.117
 
 For ML project make script:
 
@@ -277,7 +277,7 @@ Tried accessing storage through Globulus, but my permission was denied when load
 
 Unable to access.
 
-[#### Storage2](https://washu.atlassian.net/wiki/x/H4ADaw)
+#### [Storage2](https://washu.atlassian.net/wiki/x/H4ADaw)
 
 Works great, able to upload files via Globus and view. Able to access it using jobs too: `srun -p general-interactive /bin/ls /storage2/fs1/brianallen/Active`
 
@@ -310,9 +310,29 @@ Works great, able to upload files via Globus and view. Able to access it using j
   - Interactive vs. batch jobs?
   - CPU vs. GPU?
 
+## Meeting with Arpana Agrawal
+
+- She has a GitHub which she can send over to me
+- She will forward me an email chain with Emma and Ellen. They tried to move over to compute1, but there was no slurm.
+- An undergrad set up all of the pipelines, but
+- We need a period of time where we have access to our existing system and RIS so that we can make sure it works
+- "Compute2" should be ready in September
+- Someone was worried about the cost of Compute2. The pricing model is not totally transparent, there are some worries about this and how researchers will get funding/gratnts for
+- We would need to have someone on RIS to help us setup on Compute2
+- NIH may kick in their "cloud option" for some of these datasets. "It will be online at some point."
+- She's talking a lot about condos and what that cost would be. Do they need group priority from condos?
+- They're utilizing multiple platforms currently, and their documentation tells them what to use
+- Using multiple infrastrucutres could be too expensive
+- They'd be ready to test out compute2, but Emma thinks it will be quite a a bit of work, but doable
+
+## Compute 2 Security Review
+
+- Need to clarify with Brian that Kaggle isn't its own application. Everything I ran was Python, though researchers will certainly run any application they want on RIS
+
 ## TODOs
 
-- [ ] Run a BIG job. More hyperparameters, how many cores can I use, how much memory, how long does queue take?
+- [ ] Look through workflows that Arpana sent
+- [x] Run a BIG job. More hyperparameters, how many cores can I use, how much memory, how long does queue take?
 - [ ] Run a GPU job
 - [ ] Update script to output text file with best hyperparameters
 - [ ] Use pytorch instead of keras.
