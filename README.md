@@ -325,6 +325,39 @@ Works great, able to upload files via Globus and view. Able to access it using j
 - Using multiple infrastrucutres could be too expensive
 - They'd be ready to test out compute2, but Emma thinks it will be quite a a bit of work, but doable
 
+## Meeting with Emma Johnson and Alexander Hatoum
+
+### Questions
+
+- Are the GitHub projects self-contained? Distributed projects are more difficult to migrate
+- Scheduler is slurm?
+- Containers?
+- Access to storage?
+- Running parallel jobs?
+- Monitoring jobs?
+- Interactive vs. batch jobs?
+- CPU vs. GPU?
+
+### Notes
+
+- Our students don't have a CS background. The RIS documentation is completely unpenatrable to them.
+- Pipelines are handed down by graduate students.
+- "It's knowing what the magic word is so you can get the system to do what you want it to do."
+- ABCD dataset
+- I'm drowning in data, I'll just shift my research to focus on something else.
+- They are using Globus . They split their stuff into LTS and scratch
+- How many scripts are there? 10-20 applications we're using
+- It might be good for me to try to run PRS-CS on RIS. Is there example data I can run?
+- Usually we're running into setup issues, path stuff, or weird application. Students are running written instructions. If they run into issues, they're pretty much dead in the water
+- https://opain.github.io/GenoPred/
+- They also use MONAI for imaging GPU applications
+- One thing I like about HTCF is there's a slack channel where you can see what other pipelines people are building
+- Usually one person sets up the pipeline and then hands off instructions to students
+- Could we use LLM (RAG) to help people set up pipelines? Boodlebox or our RAG system could do this.
+- It's going to take time -> takes people away from their projects ->
+
+### Notes
+
 ## Compute 2 Security Review
 
 - Need to clarify with Brian that Kaggle isn't its own application. Everything I ran was Python, though researchers will certainly run any application they want on RIS
